@@ -171,13 +171,30 @@ export function useDatabase() {
     if (!db) return [];
     
     const now = new Date().toISOString();
+    
+    // Get all cards that are either new (never reviewed) or due for review
     const result = await db.getAllAsync(
       `SELECT * FROM cards 
        WHERE deck_id = ? 
-       AND (next_review IS NULL OR next_review <= ?)
-       ORDER BY next_review ASC, id ASC`,
+       AND (last_reviewed IS NULL OR next_review IS NULL OR next_review <= ?)
+       ORDER BY 
+         CASE WHEN last_reviewed IS NULL THEN 0 ELSE 1 END,
+         next_review ASC, 
+         id ASC`,
       [deckId, now]
     );
+    console.log(`Cards for review in deck ${deckId}:`, result.length, 'cards found');
+    
+    // If no cards are due, return all cards in the deck for study
+    if (result.length === 0) {
+      const allCards = await db.getAllAsync(
+        'SELECT * FROM cards WHERE deck_id = ? ORDER BY id ASC',
+        [deckId]
+      );
+      console.log(`No cards due, returning all ${allCards.length} cards for study`);
+      return allCards as Card[];
+    }
+    
     return result as Card[];
   };
 

@@ -45,22 +45,42 @@ export default function StudyScreen() {
 
   const loadCards = useCallback(async () => {
     try {
-      const reviewCards = await getCardsForReview(parseInt(deckId as string, 10));
+      const deckIdNum = parseInt(deckId as string, 10);
+      console.log('Loading cards for deck:', deckIdNum);
+      
+      const reviewCards = await getCardsForReview(deckIdNum);
+      console.log('Loaded cards for study:', reviewCards.length);
+      console.log('First few cards:', reviewCards.slice(0, 2));
+      
       setCards(reviewCards);
       setLoading(false);
       
       if (reviewCards.length === 0) {
+        console.log('No cards found, showing complete screen');
         setStudyComplete(true);
+      } else {
+        console.log('Cards loaded successfully, starting study session');
       }
     } catch (error) {
       console.error('Error loading cards:', error);
       Alert.alert('Error', 'Failed to load cards for review');
+      setLoading(false);
     }
   }, [deckId, getCardsForReview]);
 
   useEffect(() => {
     loadCards();
   }, [loadCards]);
+
+  useEffect(() => {
+    console.log('Study screen state:', {
+      loading,
+      studyComplete,
+      cardsLength: cards.length,
+      currentCardIndex,
+      showAnswerButtons
+    });
+  }, [loading, studyComplete, cards.length, currentCardIndex, showAnswerButtons]);
 
   const handleCardFlip = () => {
     setShowAnswerButtons(true);
@@ -92,17 +112,24 @@ export default function StudyScreen() {
   const nextCard = () => {
     setShowAnswerButtons(false);
     
-    if (currentCardIndex + 1 >= cards.length) {
-      setStudyComplete(true);
-      return;
-    }
+    setCurrentCardIndex(prevIndex => {
+      const newIndex = prevIndex + 1;
+      console.log(`Moving to card ${newIndex} of ${cards.length}`);
+      
+      if (newIndex >= cards.length) {
+        console.log('No more cards, completing study session');
+        setStudyComplete(true);
+        return prevIndex;
+      }
 
-    // Animate card exit
-    opacity.value = withTiming(0, { duration: 200 }, () => {
-      runOnJS(() => {
-        setCurrentCardIndex(currentCardIndex + 1);
-        opacity.value = withTiming(1, { duration: 200 });
-      })();
+      // Animate card transition
+      opacity.value = withTiming(0, { duration: 200 }, () => {
+        runOnJS(() => {
+          opacity.value = withTiming(1, { duration: 200 });
+        })();
+      });
+      
+      return newIndex;
     });
   };
 
@@ -178,8 +205,11 @@ export default function StudyScreen() {
           <Text style={styles.completeDescription}>
             {cards.length === 0 
               ? 'No cards are due for review right now.'
-              : `You've reviewed ${cards.length} cards.`
+              : `You've reviewed ${currentCardIndex} of ${cards.length} cards.`
             }
+          </Text>
+          <Text style={styles.completeDescription}>
+            Debug: currentIndex={currentCardIndex}, cardsLength={cards.length}, loading={loading.toString()}
           </Text>
           <TouchableOpacity
             style={styles.doneButton}

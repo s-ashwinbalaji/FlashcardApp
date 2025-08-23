@@ -186,18 +186,18 @@ function DeckCard({ deck, onStudy, onEdit, onDelete }: DeckCardProps) {
       <TouchableOpacity
         style={[
           styles.studyButton,
-          stats.due === 0 && stats.new === 0 && styles.studyButtonDisabled,
+          stats.total === 0 && styles.studyButtonDisabled,
         ]}
         onPress={onStudy}
-        disabled={stats.due === 0 && stats.new === 0}
+        disabled={stats.total === 0}
       >
         <Text
           style={[
             styles.studyButtonText,
-            stats.due === 0 && stats.new === 0 && styles.studyButtonTextDisabled,
+            stats.total === 0 && styles.studyButtonTextDisabled,
           ]}
         >
-          Study
+          Study {stats.due + stats.new > 0 ? `(${stats.due + stats.new})` : ''}
         </Text>
       </TouchableOpacity>
     </View>

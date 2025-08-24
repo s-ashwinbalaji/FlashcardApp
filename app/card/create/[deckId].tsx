@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams, router, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useDatabase } from '../../../hooks/useDatabase';
 import { useTheme } from '../../../hooks/useTheme';
@@ -59,7 +59,20 @@ export default function CreateCardScreen() {
 
   return (
     <>
-
+      <Stack.Screen 
+        options={{ 
+          title: 'Add Card',
+          headerBackTitle: 'Back',
+          headerStyle: {
+            backgroundColor: theme.isDark ? '#000000' : '#FFFFFF',
+          },
+          headerTintColor: theme.isDark ? '#cdc2dc' : '#1a434e',
+          headerTitleStyle: {
+            color: theme.isDark ? '#cdc2dc' : '#1a434e',
+          },
+        }} 
+      />
+      
       <KeyboardAvoidingView 
         style={[
           styles.container,
@@ -190,7 +203,7 @@ export default function CreateCardScreen() {
             <Text style={[
               styles.tipsTitle,
               theme.isDark && { color: '#cdc2dc' }
-            ]}>💡 Card Creation Tips</Text>
+            ]}>Tips for Great Cards</Text>
             <View style={styles.tipItem}>
               <Text style={[
                 styles.tipText,

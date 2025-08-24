@@ -63,7 +63,7 @@ export default function MyDecksScreen() {
   };
 
   const handleStudyDeck = (deck: Deck) => {
-    router.push(`/study?deckId=${deck.id}&deckName=${encodeURIComponent(deck.name)}`);
+    router.push(`/(tabs)/study?deckId=${deck.id}&deckName=${encodeURIComponent(deck.name)}`);
   };
 
   const handleEditDeck = (deck: Deck) => {

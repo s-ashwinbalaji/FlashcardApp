@@ -89,7 +89,7 @@ export default function DeckDetailScreen() {
       Alert.alert('No Cards', 'Add some cards to this deck before studying.');
       return;
     }
-    router.push(`/study?deckId=${deckId}&deckName=${encodeURIComponent(deck?.name || '')}`);
+    router.push(`/(tabs)/study?deckId=${deckId}&deckName=${encodeURIComponent(deck?.name || '')}`);
   };
 
   const renderCardItem = ({ item: card }: { item: Card }) => (

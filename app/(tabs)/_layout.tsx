@@ -1,22 +1,26 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../hooks/useTheme';
 
 export default function TabLayout() {
+  const { theme } = useTheme();
+  
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: '#8E8E93',
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.isDark ? '#cdc2dc' : '#8E8E93',
         tabBarStyle: {
-          backgroundColor: '#F2F2F7',
-          borderTopWidth: 0,
-          elevation: 0,
-          shadowOpacity: 0.1,
-          shadowOffset: { width: 0, height: -1 },
-          shadowRadius: 4,
+          backgroundColor: theme.colors.surface,
+          borderTopWidth: 1,
+          borderTopColor: theme.colors.border,
+          elevation: 8,
+          shadowOpacity: 0.15,
+          shadowOffset: { width: 0, height: -2 },
+          shadowRadius: 8,
         },
         headerStyle: {
-          backgroundColor: '#F2F2F7',
+          backgroundColor: theme.colors.primary,
           borderBottomWidth: 0,
           elevation: 0,
           shadowOpacity: 0.1,
@@ -24,15 +28,16 @@ export default function TabLayout() {
         headerTitleStyle: {
           fontSize: 18,
           fontWeight: '600',
+          color: theme.isDark ? '#000000' : '#FFFFFF',
         },
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="create"
         options={{
-          title: 'My Decks',
+          title: 'Create',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="library-outline" size={size} color={color} />
+            <Ionicons name="add-circle-outline" size={size} color={color} />
           ),
         }}
       />
@@ -46,11 +51,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="create"
+        name="my-decks"
         options={{
-          title: 'Create',
+          title: 'My Decks',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle-outline" size={size} color={color} />
+            <Ionicons name="library-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" size={size} color={color} />
           ),
         }}
       />

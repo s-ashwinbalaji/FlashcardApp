@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -90,9 +91,20 @@ export default function FlashCard({ card, onFlip }: FlashCardProps) {
       </TouchableOpacity>
       
       <View style={styles.cardInfo}>
-        <Text style={styles.cardInfoText}>
-          Difficulty: {card.difficulty}/5 • Reviews: {card.review_count}
-        </Text>
+        <View style={styles.infoRow}>
+          <View style={styles.infoItem}>
+            <Ionicons name="star" size={12} color="#FFD700" />
+            <Text style={styles.cardInfoText}>
+              EF: {card.easiness_factor.toFixed(1)}
+            </Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Ionicons name="refresh" size={12} color="#1a434e" />
+            <Text style={styles.cardInfoText}>
+              Reviews: {card.review_count}
+            </Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -106,7 +118,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
-    perspective: 1000,
   },
   card: {
     position: 'absolute',
@@ -114,23 +125,25 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
-    shadowColor: '#000',
+    shadowColor: '#1a434e',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 8,
     },
     shadowOpacity: 0.15,
-    shadowRadius: 8,
+    shadowRadius: 16,
     elevation: 8,
     backfaceVisibility: 'hidden',
+    borderWidth: 1,
+    borderColor: '#F0F0F0',
   },
   frontCard: {
     borderLeftWidth: 6,
-    borderLeftColor: '#007AFF',
+    borderLeftColor: '#1a434e',
   },
   backCard: {
     borderLeftWidth: 6,
-    borderLeftColor: '#34C759',
+    borderLeftColor: '#1a434e',
   },
   cardContent: {
     flex: 1,
@@ -147,7 +160,7 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 18,
-    color: '#000',
+    color: '#1a434e',
     lineHeight: 28,
     textAlign: 'center',
     flex: 1,
@@ -168,9 +181,20 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingHorizontal: 20,
   },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  infoItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 8,
+  },
   cardInfoText: {
     fontSize: 12,
     color: '#8E8E93',
     textAlign: 'center',
+    marginLeft: 4,
   },
 });
